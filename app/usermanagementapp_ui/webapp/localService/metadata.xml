@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="usermanagementapp_services" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="incidents" EntityType="usermanagementapp_services.incidents">
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="incidents"/>
+                </EntitySet>
+            </EntityContainer>
+            <EntityType Name="incidents">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ticket_no" Type="Edm.String" MaxLength="8"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="system" Type="Edm.String" MaxLength="3"/>
+                <Property Name="client" Type="Edm.String" MaxLength="3"/>
+                <Property Name="targetid" Type="Edm.String"/>
+                <Property Name="approverid" Type="Edm.String"/>
+                <Property Name="status" Type="Edm.String"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="usermanagementapp_services.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="usermanagementapp_services.incidents"/>
+            </EntityType>
+            <EntityType Name="DraftAdministrativeData">
+                <Key>
+                    <PropertyRef Name="DraftUUID"/>
+                </Key>
+                <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
+            </EntityType>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="usermanagementapp_services.incidents"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="usermanagementapp_services.incidents"/>
+            </Action>
+            <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="usermanagementapp_services.incidents"/>
+                <ReturnType Type="usermanagementapp_services.incidents"/>
+            </Action>
+            <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="usermanagementapp_services.incidents"/>
+                <Parameter Name="PreserveChanges" Type="Edm.Boolean"/>
+                <ReturnType Type="usermanagementapp_services.incidents"/>
+            </Action>
+            <Annotations Target="usermanagementapp_services.incidents">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="{i18n>Incident}"/>
+                            <PropertyValue Property="TypeNamePlural" String="{i18n>Incidents}"/>
+                                <PropertyValue Property="Title">
+                                    <Record Type="UI.DataField">
+                                        <PropertyValue Property="Value" Path="ticket_no"/>
+                                    </Record>
+                                </PropertyValue>
+                                <PropertyValue Property="Description">
+                                    <Record Type="UI.DataField">
+                                        <PropertyValue Property="Value" Path="description"/>
+                                    </Record>
+                                </PropertyValue>
+                            </Record>
+                        </Annotation>
+                        <Annotation Term="UI.SelectionFields">
+                            <Collection>
+                                <PropertyPath>ticket_no</PropertyPath>
+                                <PropertyPath>targetid</PropertyPath>
+                            </Collection>
+                        </Annotation>
+                        <Annotation Term="UI.Facets">
+                            <Collection>
+                                <Record Type="UI.ReferenceFacet">
+                                    <PropertyValue Property="Label" String="{i18n>Details}"/>
+                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+                                    </Record>
+                                    <Record Type="UI.ReferenceFacet">
+                                        <PropertyValue Property="Label" String="{i18n>Admin}"/>
+                                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Admin"/>
+                                        </Record>
+                                    </Collection>
+                                </Annotation>
+                                <Annotation Term="UI.FieldGroup" Qualifier="Details">
+                                    <Record Type="UI.FieldGroupType">
+                                        <PropertyValue Property="Data">
+                                            <Collection>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="ticket_no"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="description"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="system"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="client"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="targetid"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="approverid"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="status"/>
+                                                </Record>
+                                            </Collection>
+                                        </PropertyValue>
+                                    </Record>
+                                </Annotation>
+                                <Annotation Term="UI.FieldGroup" Qualifier="Admin">
+                                    <Record Type="UI.FieldGroupType">
+                                        <PropertyValue Property="Data">
+                                            <Collection>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="ID"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="createdBy"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="createdAt"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="modifiedBy"/>
+                                                </Record>
+                                                <Record Type="UI.DataField">
+                                                    <PropertyValue Property="Value" Path="modifiedAt"/>
+                                                </Record>
+                                            </Collection>
+                                        </PropertyValue>
+                                    </Record>
+                                </Annotation>
+                                <Annotation Term="UI.LineItem">
+                                    <Collection>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="ticket_no"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="description"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="system"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="client"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="targetid"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="approverid"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="status"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="createdBy"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="createdAt"/>
+                                        </Record>
+                                    </Collection>
+                                </Annotation>
+                            </Annotations>
+                            <Annotations Target="usermanagementapp_services.EntityContainer/incidents">
+                                <Annotation Term="Common.DraftRoot">
+                                    <Record Type="Common.DraftRootType">
+                                        <PropertyValue Property="ActivationAction" String="usermanagementapp_services.draftActivate"/>
+                                        <PropertyValue Property="EditAction" String="usermanagementapp_services.draftEdit"/>
+                                        <PropertyValue Property="PreparationAction" String="usermanagementapp_services.draftPrepare"/>
+                                    </Record>
+                                </Annotation>
+                                <Annotation Term="Capabilities.InsertRestrictions">
+                                    <Record Type="Capabilities.InsertRestrictionsType">
+                                        <PropertyValue Property="Insertable" Bool="true"/>
+                                    </Record>
+                                </Annotation>
+                                <Annotation Term="Capabilities.UpdateRestrictions">
+                                    <Record Type="Capabilities.UpdateRestrictionsType">
+                                        <PropertyValue Property="Updatable" Bool="true"/>
+                                    </Record>
+                                </Annotation>
+                                <Annotation Term="Capabilities.DeleteRestrictions">
+                                    <Record Type="Capabilities.DeleteRestrictionsType">
+                                        <PropertyValue Property="Deletable" Bool="true"/>
+                                    </Record>
+                                </Annotation>
+                            </Annotations>
+                            <Annotations Target="usermanagementapp_services.incidents/ID">
+                                <Annotation Term="Common.Label" String="{i18n>ID}"/>
+                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                </Annotations>
+                                <Annotations Target="usermanagementapp_services.incidents/createdAt">
+                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                    <Annotation Term="Core.Immutable" Bool="true"/>
+                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                    <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                    </Annotations>
+                                    <Annotations Target="usermanagementapp_services.incidents/createdBy">
+                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                        <Annotation Term="Core.Immutable" Bool="true"/>
+                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                            <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                            </Annotations>
+                                            <Annotations Target="usermanagementapp_services.incidents/modifiedAt">
+                                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                <Annotation Term="Common.Label" String="{i18n>ModifiedAt}"/>
+                                                </Annotations>
+                                                <Annotations Target="usermanagementapp_services.incidents/modifiedBy">
+                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                    <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                        <Annotation Term="Common.Label" String="{i18n>ModifiedBy}"/>
+                                                        </Annotations>
+                                                        <Annotations Target="usermanagementapp_services.incidents/ticket_no">
+                                                            <Annotation Term="Common.Label" String="{i18n>Ticket_No}"/>
+                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                            </Annotations>
+                                                            <Annotations Target="usermanagementapp_services.incidents/description">
+                                                                <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                </Annotations>
+                                                                <Annotations Target="usermanagementapp_services.incidents/system">
+                                                                    <Annotation Term="Common.Label" String="{i18n>System}"/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="usermanagementapp_services.incidents/client">
+                                                                        <Annotation Term="Common.Label" String="{i18n>Client}"/>
+                                                                        </Annotations>
+                                                                        <Annotations Target="usermanagementapp_services.incidents/targetid">
+                                                                            <Annotation Term="Common.Label" String="{i18n>Targetid}"/>
+                                                                            </Annotations>
+                                                                            <Annotations Target="usermanagementapp_services.incidents/approverid">
+                                                                                <Annotation Term="Common.Label" String="{i18n>Approverid}"/>
+                                                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                </Annotations>
+                                                                                <Annotations Target="usermanagementapp_services.incidents/status">
+                                                                                    <Annotation Term="Common.Label" String="{i18n>Status}"/>
+                                                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="usermanagementapp_services.incidents/IsActiveEntity">
+                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="usermanagementapp_services.incidents/HasActiveEntity">
+                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="usermanagementapp_services.incidents/HasDraftEntity">
+                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="usermanagementapp_services.incidents/DraftAdministrativeData">
+                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="usermanagementapp_services.DraftAdministrativeData">
+                                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_DraftAdministrativeData}"/>
+                                                                                        </Annotations>
+                                                                                        <Annotations Target="usermanagementapp_services.DraftAdministrativeData/DraftUUID">
+                                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                            <Annotation Term="Common.Label" String="{i18n>Draft_DraftUUID}"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="usermanagementapp_services.DraftAdministrativeData/CreationDateTime">
+                                                                                                <Annotation Term="Common.Label" String="{i18n>Draft_CreationDateTime}"/>
+                                                                                                </Annotations>
+                                                                                                <Annotations Target="usermanagementapp_services.DraftAdministrativeData/CreatedByUser">
+                                                                                                    <Annotation Term="Common.Label" String="{i18n>Draft_CreatedByUser}"/>
+                                                                                                    </Annotations>
+                                                                                                    <Annotations Target="usermanagementapp_services.DraftAdministrativeData/DraftIsCreatedByMe">
+                                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsCreatedByMe}"/>
+                                                                                                        </Annotations>
+                                                                                                        <Annotations Target="usermanagementapp_services.DraftAdministrativeData/LastChangeDateTime">
+                                                                                                            <Annotation Term="Common.Label" String="{i18n>Draft_LastChangeDateTime}"/>
+                                                                                                            </Annotations>
+                                                                                                            <Annotations Target="usermanagementapp_services.DraftAdministrativeData/LastChangedByUser">
+                                                                                                                <Annotation Term="Common.Label" String="{i18n>Draft_LastChangedByUser}"/>
+                                                                                                                </Annotations>
+                                                                                                                <Annotations Target="usermanagementapp_services.DraftAdministrativeData/InProcessByUser">
+                                                                                                                    <Annotation Term="Common.Label" String="{i18n>Draft_InProcessByUser}"/>
+                                                                                                                    </Annotations>
+                                                                                                                    <Annotations Target="usermanagementapp_services.DraftAdministrativeData/DraftIsProcessedByMe">
+                                                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsProcessedByMe}"/>
+                                                                                                                        </Annotations>
+                                                                                                                    </Schema>
+                                                                                                                </edmx:DataServices>
+                                                                                                            </edmx:Edmx>
