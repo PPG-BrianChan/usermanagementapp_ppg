@@ -8,8 +8,8 @@ modules:
   path: gen/srv
   requires:
   - name: usermanagementapp-db
-  - name: usermanagementapp-destination-service
   - name: uaa_usermanagementapp
+  - name: usermanagementapp-destination-service
   provides:
   - name: srv-api
     properties:
@@ -105,6 +105,7 @@ resources:
             ProxyType: Internet
             Type: HTTP
             URL: https://crossfunctional-dev-org-usermanagement-usermanagementapp-srv.cfapps.eu10.hana.ondemand.com
+            forwardAuthToken: true
           existing_destinations_policy: update
       version: 1.0.0
     service: destination
