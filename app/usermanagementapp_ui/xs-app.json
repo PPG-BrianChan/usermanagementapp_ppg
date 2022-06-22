@@ -5,7 +5,7 @@
     {
       "source": "^/usermanagementapp-services/(.*)$",
       "target": "/usermanagementapp-services/$1",
-      "destination": "srvurl",
+      "destination": "usermanagement-endpoint",
       "authenticationType": "xsuaa"
     },
     {

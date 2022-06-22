@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "creator": "cds-dk 4.8.2"
+  },
+  "$version": "2.0",
+  "definitions": {
+    "ZAPI_C_USERMANAGEMENT": {
+      "kind": "service",
+      "@cds.external": true,
+      "@m.IsDefaultEntityContainer": "true",
+      "@sap.message.scope.supported": "true",
+      "@sap.supported.formats": "atom json xlsx"
+    },
+    "ZAPI_C_USERMANAGEMENT.Bapiret2": {
+      "kind": "type",
+      "elements": {
+        "Type": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "Message type"
+        },
+        "Id": {
+          "type": "cds.String",
+          "length": 20,
+          "@sap.label": "Message Class"
+        },
+        "Number": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Message Number"
+        },
+        "Message": {
+          "type": "cds.String",
+          "length": 220,
+          "@sap.label": "Message Text"
+        },
+        "LogNo": {
+          "type": "cds.String",
+          "length": 20,
+          "@sap.label": "Log number"
+        },
+        "LogMsgNo": {
+          "type": "cds.String",
+          "length": 6,
+          "@sap.label": "Message serial no."
+        },
+        "MessageV1": {
+          "type": "cds.String",
+          "length": 50,
+          "@sap.label": "Message Variable"
+        },
+        "MessageV2": {
+          "type": "cds.String",
+          "length": 50,
+          "@sap.label": "Message Variable"
+        },
+        "MessageV3": {
+          "type": "cds.String",
+          "length": 50,
+          "@sap.label": "Message Variable"
+        },
+        "MessageV4": {
+          "type": "cds.String",
+          "length": 50,
+          "@sap.label": "Message Variable"
+        },
+        "Parameter": {
+          "type": "cds.String",
+          "length": 32,
+          "@sap.label": "Parameter Name"
+        },
+        "Row": {
+          "type": "cds.Integer",
+          "@sap.label": "Lines in parameter"
+        },
+        "Field": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Field name"
+        },
+        "System": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "Logical system"
+        }
+      }
+    },
+    "ZAPI_C_USERMANAGEMENT.ZC_USERMANAGEMENT": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.creatable": "false",
+      "@sap.updatable": "false",
+      "@sap.deletable": "false",
+      "@sap.content.version": "1",
+      "@sap.label": "Consumption view of user table",
+      "elements": {
+        "userid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 12,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "User",
+          "@sap.quickinfo": "User Name in User Master Record"
+        },
+        "fullname": {
+          "type": "cds.String",
+          "length": 80,
+          "@sap.label": "Full Name",
+          "@sap.quickinfo": "Full Name of Person"
+        },
+        "email": {
+          "type": "cds.String",
+          "length": 241,
+          "@sap.label": "E-Mail Address"
+        },
+        "UIM_INFO": {
+          "type": "cds.LargeString",
+          "@sap.label": "UIM Info",
+          "@sap.visible": "false",
+          "@sap.updatable": "false"
+        }
+      },
+      "actions": {
+        "unlock": {
+          "kind": "action",
+          "returns": {
+            "type": "ZAPI_C_USERMANAGEMENT.Bapiret2"
+          }
+        }
+      }
+    }
+  }
+}

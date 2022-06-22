@@ -14,23 +14,22 @@ annotate um.incidents with {
                 @readonly;
     system      @title : '{i18n>System}';
     client      @title : '{i18n>Client}';
-    // @Common.ValueListWithFixedValues : false
-    // @Common.ValueList : {
-    //     CollectionPath : 'users',
-    //     Parameters : [
-    //         {
-    //             $Type : 'Common.ValueListParameterInOut',
-    //             LocalDataProperty : 'targetid_bname',
-    //             ValueListProperty : 'bname',
-    //         },
-    //         {
-    //             $Type : 'Common.ValueListParameterDisplayOnly',
-    //             ValueListProperty : 'name_text',
-    //         }
-    //     ],
-    // }
+    @Common.ValueListWithFixedValues : false
+    @Common.ValueList : {
+        CollectionPath : 'users',
+        Parameters : [
+            {
+                $Type : 'Common.ValueListParameterInOut',
+                LocalDataProperty : 'targetid',
+                ValueListProperty : 'userid',
+            },
+            {
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'fullname',
+            }
+        ],
+    }
     targetid    @title : '{i18n>Targetid}';
-                // @assert.integrity:false;
     approverid  @title : '{i18n>Approverid}'
                 @readonly;
     status      @title : '{i18n>Status}'

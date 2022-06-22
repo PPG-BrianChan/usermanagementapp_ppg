@@ -10,14 +10,13 @@ entity incidents : cuid, managed{
     description : String;
     system      : String(3);
     client      : String(3);
-    targetid    : String; //Association to users;
+    targetid    : String;//Association to users;
     approverid  : String;
     status      : String;
 }
 
-// @cds.persistence.skip
-// entity users{
-//     key userid : String;
-//     fullname : String;
-//     email : String;
-// }
+entity users{
+    key userid : String;
+    fullname : String;
+    email : String;
+}

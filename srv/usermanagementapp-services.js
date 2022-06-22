@@ -1,11 +1,25 @@
 const { executeHttpRequest } = require('@sap-cloud-sdk/core');
 const cds = require('@sap/cds');
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const { retrieveJwt } = require('@sap-cloud-sdk/core');
+const axios = require('axios');
+const initPath = '/sap/opu/odata/sap/ZAPI_C_USERMANAGEMENT/ZC_USERMANAGEMENT?$format=json';
 
 module.exports = (srv) => {
-    srv.before("CREATE", "incidents", async (req) => {
+    const { incidents, users } = srv.entities;
+
+    srv.on('READ', 'users', async (req) => {
+        console.log("Getting user list");
+        try {
+            const users = await cds.connect.to('ZAPI_C_USERMANAGEMENT');
+            return users.run(req.query);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    })
+
+    srv.before('CREATE', 'incidents', async (req) => {
         console.log(`Before CREATE`);
-        const { incidents } = srv.entities;
         const query_get_ticketno = SELECT.one
             .from(incidents)
             .columns("max(ticket_no) as ticketno");
@@ -14,26 +28,31 @@ module.exports = (srv) => {
         var ticketno = `${jsonobj.ticketno} + 1`;
         req.data.ticket_no = JSON.stringify(eval(ticketno));
         req.data.status = `PENDING`;
-        req.data.approverid = `K009287`;
+        req.data.approverid = `V614944`;
         console.log(`Request details updated`);
-        createwf(req);
-        
+        await createwf(req, users);
+
     })
-
-    // srv.after('CREATE', 'incidents', async (each, msg) => {
-        // console.log("Start of after create");
-        // console.log(each);
-        // console.log("msg");
-        // console.log(msg.data);
-        // createwf(msg.data);
-        // console.log("Start of AFTER hook");
-        // sendmailrequest(msg.data);
-    // })
-
 }
 
-const createwf = async (req) => {
+const createwf = async (req, users) => {
     console.log("Preparing WF Payload");
+    console.log('Getting approver email');
+
+    const url = initPath + `&$filter=(userid eq '${req.data.approverid}')`;
+    const response = await executeHttpRequest(
+        {
+            destinationName: "S4HANA_PSD_HTTPS_500_BR"//, jwt: jwt
+        },
+        {
+            method: 'GET',
+            url: url 
+        }
+    );
+    const approveremail = response.data.d.results[0].email.toLowerCase();
+    
+    console.log("Approver email is: ",approveremail);
+
     const payload = {
         definitionId: "usermanagementapproval",
         context: {
@@ -42,7 +61,7 @@ const createwf = async (req) => {
                 userid: req.data.targetid,
                 system: req.data.system,
                 client: req.data.client,
-                approver: "cchan@ppg.com"
+                approver: approveremail
             }
         }
     };
@@ -62,44 +81,9 @@ const createwf = async (req) => {
         );
         console.log(response.data);
     }
-    catch(error){
+    catch (error) {
         req.info("Error during WF instance creation. Check with technical team for more details.")
         console.log(error);
     }
 };
 
-
-const sendmailrequest = async (incident) => {
-    console.log("Incident Ticket No:", incident.ticket_no);
-    const mailcontent = {
-        sender: 'SAPCOEBTPGeneral@ppg.com',
-        recipient: 'cchan@ppg.com',
-        subject: 'Approval request requiring your attention',
-        body: `Kindly login to your workflow inbox to approve or reject the User management ticket, ${incident.ticketno}`
-    };
-
-    const payjson = JSON.stringify(mailcontent);
-
-    try {
-        console.log("Preparing to send request");
-        // const response = await executeHttpRequest(
-        //     {
-        //         destinationName: "Mail_Service_Api"
-        //     },
-        //     {
-        //         method: 'POST',
-        //         data: payjson,
-        //         url: "/mailrequests"
-        //     }
-        // );
-        // console.log(response.status);
-    }
-
-    catch (error) {
-        // console.log("Error in sending request:", error.response.data.error.message)
-        console.log("Error!!!!", error);
-        return;
-    }
-    console.log("Mail sent successfully");
-
-};

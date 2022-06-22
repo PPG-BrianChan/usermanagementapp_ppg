@@ -1,64 +1,74 @@
 {
-    "name": "usermanagementapp",
-    "version": "1.0.0",
-    "description": "A simple CAP project.",
-    "repository": "<Add your repository here>",
-    "license": "UNLICENSED",
-    "private": true,
-    "dependencies": {
-        "@sap/cds": "^5",
-        "express": "^4",
-        "hdb": "^0.18.3",
-        "passport": "^0.6.0",
-        "xmlhttprequest": "^1.8.0"
+  "name": "usermanagementapp",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^5",
+    "@sapmentors/cds-scp-api": "^1.0.4",
+    "axios": "^0.27.2",
+    "express": "^4",
+    "hdb": "^0.18.3",
+    "passport": "^0.6.0",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "@sap/ux-specification": "^1.100.3",
+    "sqlite3": "^5.0.2"
+  },
+  "scripts": {
+    "start": "cds run",
+    "undeploy": "cf undeploy usermanagementapp --delete-services --delete-service-keys"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env": {
+      "es2020": true,
+      "node": true,
+      "jest": true,
+      "mocha": true
     },
-    "devDependencies": {
-        "@sap/ux-specification": "^1.100.3",
-        "sqlite3": "^5.0.2"
+    "globals": {
+      "SELECT": true,
+      "INSERT": true,
+      "UPDATE": true,
+      "DELETE": true,
+      "CREATE": true,
+      "DROP": true,
+      "CDL": true,
+      "CQL": true,
+      "CXL": true,
+      "cds": true
     },
-    "scripts": {
-        "start": "cds run",
-        "undeploy": "cf undeploy usermanagementapp --delete-services --delete-service-keys"
-    },
-    "eslintConfig": {
-        "extends": "eslint:recommended",
-        "env": {
-            "es2020": true,
-            "node": true,
-            "jest": true,
-            "mocha": true
-        },
-        "globals": {
-            "SELECT": true,
-            "INSERT": true,
-            "UPDATE": true,
-            "DELETE": true,
-            "CREATE": true,
-            "DROP": true,
-            "CDL": true,
-            "CQL": true,
-            "CXL": true,
-            "cds": true
-        },
-        "rules": {
-            "no-console": "off",
-            "require-atomic-updates": "off"
+    "rules": {
+      "no-console": "off",
+      "require-atomic-updates": "off"
+    }
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "hana"
+      },
+      "uaa": {
+        "kind": "xsuaa"
+      },
+      "ZAPI_C_USERMANAGEMENT": {
+        "kind": "odata-v2",
+        "model": "srv/external/ZAPI_C_USERMANAGEMENT",
+        "credentials": {
+            "destination": "S4HANA_PSD_HTTPS_500_BR",
+            "path": "/sap/opu/odata/sap/ZAPI_C_USERMANAGEMENT"
         }
+      }
     },
-    "cds": {
-        "requires": {
-            "db": {
-                "kind": "hana"
-            },
-            "uaa":{
-                "kind": "xsuaa"
-            }
-        },
-        "hana": {
-            "deploy-format": "hdbtable"
-        }
-    },
-    "sapux": [
-        "app/usermanagementapp_ui"
-    ]
+    "hana": {
+      "deploy-format": "hdbtable"
+    }
+  },
+  "sapux": [
+    "app/usermanagementapp_ui"
+  ]
 }

@@ -10,6 +10,8 @@ modules:
   - name: usermanagementapp-db
   - name: uaa_usermanagementapp
   - name: usermanagementapp-destination-service
+  - name: usermanagementapp-connectivity-service
+  - name: usermanagementapp-logs
   provides:
   - name: srv-api
     properties:
@@ -89,6 +91,8 @@ resources:
     hdi-service-name: ${service-name}
 - name: usermanagementapp-destination-service
   type: org.cloudfoundry.managed-service
+  requires:
+    - name: srv-api
   parameters:
     config:
       HTML5Runtime_enabled: true
@@ -101,10 +105,10 @@ resources:
             Type: HTTP
             URL: https://ui5.sap.com
           - Authentication: NoAuthentication
-            Name: srvurl
+            Name: usermanagement-endpoint
             ProxyType: Internet
             Type: HTTP
-            URL: https://crossfunctional-dev-org-usermanagement-usermanagementapp-srv.cfapps.eu10.hana.ondemand.com
+            URL: ~{srv-api/srv-url}
             forwardAuthToken: true
           existing_destinations_policy: update
       version: 1.0.0
@@ -124,6 +128,16 @@ resources:
     service: xsuaa
     service-name: usermanagementapp-xsuaa-service
     service-plan: application
+- name: usermanagementapp-connectivity-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: connectivity
+    service-plan: lite
+- name: usermanagementapp-logs
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: application-logs
+    service-plan: lite
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
