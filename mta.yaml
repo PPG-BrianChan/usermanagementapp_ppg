@@ -11,7 +11,6 @@ modules:
   - name: uaa_usermanagementapp
   - name: usermanagementapp-destination-service
   - name: usermanagementapp-connectivity-service
-  - name: usermanagementapp-logs
   provides:
   - name: srv-api
     properties:
@@ -91,8 +90,6 @@ resources:
     hdi-service-name: ${service-name}
 - name: usermanagementapp-destination-service
   type: org.cloudfoundry.managed-service
-  requires:
-    - name: srv-api
   parameters:
     config:
       HTML5Runtime_enabled: true
@@ -115,6 +112,8 @@ resources:
     service: destination
     service-name: usermanagementapp-destination-service
     service-plan: lite
+  requires:
+  - name: srv-api
 - name: usermanagementapp_html_repo_host
   type: org.cloudfoundry.managed-service
   parameters:
@@ -132,11 +131,6 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     service: connectivity
-    service-plan: lite
-- name: usermanagementapp-logs
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: application-logs
     service-plan: lite
 parameters:
   deploy_mode: html5-repo

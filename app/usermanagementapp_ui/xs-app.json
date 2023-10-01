@@ -6,7 +6,8 @@
       "source": "^/usermanagementapp-services/(.*)$",
       "target": "/usermanagementapp-services/$1",
       "destination": "usermanagement-endpoint",
-      "authenticationType": "xsuaa"
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
     },
     {
       "source": "^/resources/(.*)$",

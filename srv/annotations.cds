@@ -14,21 +14,21 @@ annotate um.incidents with {
                 @readonly;
     system      @title : '{i18n>System}';
     client      @title : '{i18n>Client}';
-    @Common.ValueListWithFixedValues : false
-    @Common.ValueList : {
-        CollectionPath : 'users',
-        Parameters : [
-            {
-                $Type : 'Common.ValueListParameterInOut',
-                LocalDataProperty : 'targetid',
-                ValueListProperty : 'userid',
-            },
-            {
-                $Type : 'Common.ValueListParameterDisplayOnly',
-                ValueListProperty : 'fullname',
-            }
-        ],
-    }
+    // @Common.ValueListWithFixedValues : false
+    // @Common.ValueList : {
+    //     CollectionPath : 'users',
+    //     Parameters : [
+    //         {
+    //             $Type : 'Common.ValueListParameterInOut',
+    //             LocalDataProperty : 'targetid',
+    //             ValueListProperty : 'userid',
+    //         },
+    //         {
+    //             $Type : 'Common.ValueListParameterDisplayOnly',
+    //             ValueListProperty : 'fullname',
+    //         }
+    //     ],
+    // }
     targetid    @title : '{i18n>Targetid}';
     approverid  @title : '{i18n>Approverid}'
                 @readonly;

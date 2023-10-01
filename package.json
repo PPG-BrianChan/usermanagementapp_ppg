@@ -1,74 +1,81 @@
 {
-  "name": "usermanagementapp",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap/cds": "^5",
-    "@sapmentors/cds-scp-api": "^1.0.4",
-    "axios": "^0.27.2",
-    "express": "^4",
-    "hdb": "^0.18.3",
-    "passport": "^0.6.0",
-    "xmlhttprequest": "^1.8.0"
-  },
-  "devDependencies": {
-    "@sap/ux-specification": "^1.100.3",
-    "sqlite3": "^5.0.2"
-  },
-  "scripts": {
-    "start": "cds run",
-    "undeploy": "cf undeploy usermanagementapp --delete-services --delete-service-keys"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "usermanagementapp",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap-cloud-sdk/http-client": "^3.5.0",
+        "@sap/cds": "^6.8.4",
+        "@sapmentors/cds-scp-api": "^1.0.4",
+        "axios": "^1.5.1",
+        "express": "^4",
+        "hdb": "^0.19.6",
+        "passport": "^0.6.0",
+        "xmlhttprequest": "^1.8.0"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+    "devDependencies": {
+        "@sap/ux-specification": "^1.108.15",
+        "rimraf": "^5.0.5",
+        "sqlite3": "^5.1.6"
     },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
-    }
-  },
-  "cds": {
-    "requires": {
-      "db": {
-        "kind": "hana"
-      },
-      "uaa": {
-        "kind": "xsuaa"
-      },
-      "ZAPI_C_USERMANAGEMENT": {
-        "kind": "odata-v2",
-        "model": "srv/external/ZAPI_C_USERMANAGEMENT",
-        "credentials": {
-            "destination": "S4HANA_PSD_HTTPS_500_BR",
-            "path": "/sap/opu/odata/sap/ZAPI_C_USERMANAGEMENT"
+    "scripts": {
+        "start": "cds run",
+        "undeploy": "cf undeploy usermanagementapp --delete-services --delete-service-keys --delete-service-brokers",
+        "watch-usermanagementapp_ui": "cds watch --open usermanagementapp_ui/webapp/index.html?sap-ui-xx-viewCache=false",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
+        },
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
+        },
+        "rules": {
+            "no-console": "off",
+            "require-atomic-updates": "off"
         }
-      }
     },
-    "hana": {
-      "deploy-format": "hdbtable"
-    }
-  },
-  "sapux": [
-    "app/usermanagementapp_ui"
-  ]
+    "cds": {
+        "requires": {
+            "db": {
+                "kind": "sql"
+            },
+            "uaa": {
+                "kind": "xsuaa"
+            },
+            "ZAPI_C_USERMANAGEMENT": {
+                "kind": "odata-v2",
+                "model": "srv/external/ZAPI_C_USERMANAGEMENT",
+                "csrf": true,
+                "credentials": {
+                    "destination": "S4HANA_PSD_HTTPS_505_BR_Basic",
+                    "path": "/sap/opu/odata/sap/ZAPI_C_USERMANAGEMENT"
+                }
+            }
+        },
+        "hana": {
+            "deploy-format": "hdbtable"
+        }
+    },
+    "sapux": [
+        "app/usermanagementapp_ui",
+        "app/usermanagementapp_ui"
+    ]
 }

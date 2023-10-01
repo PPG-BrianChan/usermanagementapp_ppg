@@ -16,3 +16,8 @@ service usermanagementapp_services //@(requires : 'authenticated-user')
     }
     entity users as projection on external.ZC_USERMANAGEMENT
 }
+
+service api {
+    entity incidents   as projection on uman.incidents;
+    action updateApprovalStatus(objectID : String, decision : String);
+}

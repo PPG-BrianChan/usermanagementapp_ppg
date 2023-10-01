@@ -1,5 +1,5 @@
 {
-    "_version": "1.40.0",
+    "_version": "1.49.0",
     "sap.app": {
         "id": "usermanagementappui",
         "type": "application",
@@ -11,27 +11,32 @@
         "description": "{{appDescription}}",
         "resources": "resources.json",
         "sourceTemplate": {
-            "id": "@sap-ux/fiori-elements-writer:lrop",
-            "version": "0.3.6",
-            "toolsId": "68955803-17c2-4c87-9fc4-b923ed480a4e"
+            "id": "@sap/generator-fiori:lrop",
+            "version": "1.11.0",
+            "toolsId": "adf51f6b-1fb5-4fd8-95ca-c8697bc3824f"
         },
         "dataSources": {
             "mainService": {
                 "uri": "usermanagementapp-services/",
                 "type": "OData",
                 "settings": {
-                    "annotations": [
-                        "annotation"
-                    ],
+                    "annotations": [],
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "4.0"
                 }
-            },
-            "annotation": {
-                "type": "ODataAnnotation",
-                "uri": "annotations/annotation.xml",
-                "settings": {
-                    "localUri": "annotations/annotation.xml"
+            }
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "lockedUsers-Manage": {
+                    "semanticObject": "lockedUsers",
+                    "action": "Manage",
+                    "title": "{{flpTitle}}",
+                    "subTitle": "{{flpSubtitle}}",
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    }
                 }
             }
         }
@@ -55,7 +60,7 @@
     "sap.ui5": {
         "flexEnabled": true,
         "dependencies": {
-            "minUI5Version": "1.101.0",
+            "minUI5Version": "1.118.1",
             "libs": {
                 "sap.m": {},
                 "sap.ui.core": {},

@@ -18,6 +18,7 @@
                 <EntitySet Name="incidents" EntityType="usermanagementapp_services.incidents">
                     <NavigationPropertyBinding Path="SiblingEntity" Target="incidents"/>
                 </EntitySet>
+                <EntitySet Name="users" EntityType="usermanagementapp_services.users"/>
             </EntityContainer>
             <EntityType Name="incidents">
                 <Key>
@@ -41,6 +42,15 @@
                 <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
                 <NavigationProperty Name="DraftAdministrativeData" Type="usermanagementapp_services.DraftAdministrativeData" ContainsTarget="true"/>
                 <NavigationProperty Name="SiblingEntity" Type="usermanagementapp_services.incidents"/>
+            </EntityType>
+            <EntityType Name="users">
+                <Key>
+                    <PropertyRef Name="userid"/>
+                </Key>
+                <Property Name="userid" Type="Edm.String" MaxLength="12" Nullable="false"/>
+                <Property Name="fullname" Type="Edm.String" MaxLength="80"/>
+                <Property Name="email" Type="Edm.String" MaxLength="241"/>
+                <Property Name="UIM_INFO" Type="Edm.String"/>
             </EntityType>
             <EntityType Name="DraftAdministrativeData">
                 <Key>
@@ -254,6 +264,23 @@
                                                                         <Annotation Term="Common.Label" String="{i18n>Client}"/>
                                                                         </Annotations>
                                                                         <Annotations Target="usermanagementapp_services.incidents/targetid">
+                                                                            <Annotation Term="Common.ValueListWithFixedValues" Bool="false"/>
+                                                                            <Annotation Term="Common.ValueList">
+                                                                                <Record Type="Common.ValueListType">
+                                                                                    <PropertyValue Property="CollectionPath" String="users"/>
+                                                                                    <PropertyValue Property="Parameters">
+                                                                                        <Collection>
+                                                                                            <Record Type="Common.ValueListParameterInOut">
+                                                                                                <PropertyValue Property="LocalDataProperty" PropertyPath="targetid"/>
+                                                                                                <PropertyValue Property="ValueListProperty" String="userid"/>
+                                                                                            </Record>
+                                                                                            <Record Type="Common.ValueListParameterDisplayOnly">
+                                                                                                <PropertyValue Property="ValueListProperty" String="fullname"/>
+                                                                                            </Record>
+                                                                                        </Collection>
+                                                                                    </PropertyValue>
+                                                                                </Record>
+                                                                            </Annotation>
                                                                             <Annotation Term="Common.Label" String="{i18n>Targetid}"/>
                                                                             </Annotations>
                                                                             <Annotations Target="usermanagementapp_services.incidents/approverid">
@@ -275,6 +302,23 @@
                                                                                     </Annotations>
                                                                                     <Annotations Target="usermanagementapp_services.incidents/DraftAdministrativeData">
                                                                                         <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="usermanagementapp_services.EntityContainer/users">
+                                                                                        <Annotation Term="Capabilities.DeleteRestrictions">
+                                                                                            <Record Type="Capabilities.DeleteRestrictionsType">
+                                                                                                <PropertyValue Property="Deletable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                        <Annotation Term="Capabilities.InsertRestrictions">
+                                                                                            <Record Type="Capabilities.InsertRestrictionsType">
+                                                                                                <PropertyValue Property="Insertable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                        <Annotation Term="Capabilities.UpdateRestrictions">
+                                                                                            <Record Type="Capabilities.UpdateRestrictionsType">
+                                                                                                <PropertyValue Property="Updatable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
                                                                                     </Annotations>
                                                                                     <Annotations Target="usermanagementapp_services.DraftAdministrativeData">
                                                                                         <Annotation Term="Common.Label" String="{i18n>Draft_DraftAdministrativeData}"/>
